@@ -19,7 +19,7 @@ const Nav = styled(motion.nav)`
   font-size: 14px;
   padding: 20px 60px;
   color: white;
-  z-index: 10;
+  z-index: 99;
 `;
 
 const NavGradBG = styled.div`
