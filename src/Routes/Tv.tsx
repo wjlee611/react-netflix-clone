@@ -9,10 +9,12 @@ import { useQuery } from "react-query";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import {
+  getTvDetail,
   getTvsLatest,
   getTvsPopular,
   getTvsToday,
   getTvsTop,
+  IGetTvDetail,
   IgetTvsResult,
   ITv,
 } from "../api";
@@ -94,6 +96,10 @@ function Tv() {
     ["tvs", "top"],
     getTvsTop
   );
+  const { data: latestDetail, isLoading: latestDetailIsLoading } =
+    useQuery<IGetTvDetail>(["tvs", "detail", latestData?.id], () =>
+      getTvDetail(latestData?.id ? latestData.id : 0)
+    );
   const onOverlayClick = () => {
     history.goBack();
   };
@@ -112,14 +118,18 @@ function Tv() {
   }, [clickedTv]);
   return (
     <Wrapper>
-      {latestIsLoading || todayIsLoading || popularIsLoading || topIsLoading ? (
+      {latestIsLoading ||
+      todayIsLoading ||
+      popularIsLoading ||
+      topIsLoading ||
+      latestDetailIsLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgphoto={makeImagePath(latestData?.backdrop_path || "")}>
+          <Banner bgphoto={makeImagePath(latestDetail?.backdrop_path || "")}>
             <h1 style={{ color: "red", fontWeight: 700 }}>Latest!</h1>
-            <Title>{latestData?.name}</Title>
-            <Overview>{latestData?.overview}</Overview>
+            <Title>{latestDetail?.name}</Title>
+            <Overview>{latestDetail?.overview}</Overview>
           </Banner>
           <TvContentSlider data={todayData} title={"Airing Today"} />
           <TvContentSlider data={popularData} title={"Popular Tv Show"} />

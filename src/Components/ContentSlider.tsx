@@ -125,8 +125,9 @@ const offset = 6;
 interface IContentSlider {
   data: IgetMoviesResult | undefined;
   title: string;
+  from?: string;
 }
-function ContentSlider({ data, title }: IContentSlider) {
+function ContentSlider({ data, title, from }: IContentSlider) {
   const history = useHistory();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -137,7 +138,9 @@ function ContentSlider({ data, title }: IContentSlider) {
       if (leaving) return;
       setLeaving(true);
       const totalMovies = data.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      const maxIndex = from
+        ? Math.ceil(totalMovies / offset) - 1
+        : Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
@@ -147,12 +150,14 @@ function ContentSlider({ data, title }: IContentSlider) {
       if (leaving) return;
       setLeaving(true);
       const totalMovies = data.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      const maxIndex = from
+        ? Math.ceil(totalMovies / offset) - 1
+        : Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const onBoxClicked = (movieId: number) => {
-    history.push(`/movie/${movieId}`);
+    if (!from) history.push(`/movie/${movieId}`);
   };
   return (
     <Slider>

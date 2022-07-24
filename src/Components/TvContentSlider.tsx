@@ -122,11 +122,12 @@ const infoVariants: Variants = {
 
 const offset = 6;
 
-interface IContentSlider {
+interface ITvContentSlider {
   data: IgetTvsResult | undefined;
   title: string;
+  from?: string;
 }
-function ContentSlider({ data, title }: IContentSlider) {
+function TvContentSlider({ data, title, from }: ITvContentSlider) {
   const history = useHistory();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -136,8 +137,10 @@ function ContentSlider({ data, title }: IContentSlider) {
     if (data) {
       if (leaving) return;
       setLeaving(true);
-      const totalTvs = data.results.length - 1;
-      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      const totalTvs = data.results.length;
+      const maxIndex = from
+        ? Math.ceil(totalTvs / offset) - 1
+        : Math.floor(totalTvs / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
@@ -146,13 +149,15 @@ function ContentSlider({ data, title }: IContentSlider) {
     if (data) {
       if (leaving) return;
       setLeaving(true);
-      const totalTvs = data.results.length - 1;
-      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      const totalTvs = data.results.length;
+      const maxIndex = from
+        ? Math.ceil(totalTvs / offset) - 1
+        : Math.floor(totalTvs / offset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
   const onBoxClicked = (tvId: number) => {
-    history.push(`/tv/${tvId}`);
+    if (!from) history.push(`/tv/${tvId}`);
   };
   return (
     <Slider>
@@ -200,4 +205,4 @@ function ContentSlider({ data, title }: IContentSlider) {
   );
 }
 
-export default ContentSlider;
+export default TvContentSlider;

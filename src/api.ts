@@ -119,3 +119,20 @@ export async function getTvDetail(id: number) {
   const json = await response.json();
   return json;
 }
+
+//Search
+export async function searchMovie(keyword: string) {
+  const response = await fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}`
+  );
+  const json = await response.json();
+  return json;
+}
+
+export async function searchTv(keyword: string) {
+  const response = await fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}`
+  );
+  const json = await response.json();
+  return json;
+}
