@@ -4,6 +4,7 @@ import {
   useTransform,
   useViewportScroll,
 } from "framer-motion";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
@@ -14,11 +15,12 @@ import {
   IgetMoviesResult,
 } from "../api";
 import ContentSlider from "../Components/ContentSlider";
+import Detail from "../Components/Detail";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background-color: black;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const Loader = styled.div`
@@ -57,6 +59,7 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+  z-index: 2;
 `;
 
 const BigMovie = styled(motion.div)`
@@ -69,28 +72,7 @@ const BigMovie = styled(motion.div)`
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
-`;
-
-const BigCover = styled.div`
-  width: 100%;
-  background-size: cover;
-  background-position: center center;
-  height: 400px;
-`;
-
-const BigTitle = styled.h2`
-  color: ${(props) => props.theme.white.lighter};
-  padding: 10px;
-  font-size: 36px;
-  position: relative;
-  top: -60px;
-`;
-
-const BigOverview = styled.p`
-  padding: 20px;
-  color: ${(props) => props.theme.white.lighter};
-  position: relative;
-  top: -60px;
+  z-index: 3;
 `;
 
 function Home() {
@@ -120,6 +102,10 @@ function Home() {
       upcomingData?.results.find(
         (movie) => String(movie.id) === bigMovieMatch.params.movieId
       ));
+  useEffect(() => {
+    if (clickedMovie) document.body.style.overflowY = "hidden";
+    else document.body.style.overflowY = "scroll";
+  }, [clickedMovie]);
   return (
     <Wrapper>
       {latestIsLoading || topIsLoading || upcomingIsLoading ? (
@@ -150,18 +136,10 @@ function Home() {
                   }}
                 >
                   {clickedMovie && (
-                    <>
-                      <BigCover
-                        style={{
-                          backgroundImage: `linear-gradient(transparent, black), url(${makeImagePath(
-                            clickedMovie.backdrop_path,
-                            "w500"
-                          )})`,
-                        }}
-                      />
-                      <BigTitle>{clickedMovie.title}</BigTitle>
-                      <BigOverview>{clickedMovie.overview}</BigOverview>
-                    </>
+                    <Detail
+                      clickedMovie={clickedMovie}
+                      id={Number(bigMovieMatch.params.movieId)}
+                    />
                   )}
                 </BigMovie>
               </>

@@ -27,6 +27,7 @@ const NavGradBG = styled.div`
   height: 65px;
   background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   position: fixed;
+  z-index: 99;
 `;
 
 const Col = styled.div`

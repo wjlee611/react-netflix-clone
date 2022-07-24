@@ -4,6 +4,7 @@ import {
   useTransform,
   useViewportScroll,
 } from "framer-motion";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
@@ -20,7 +21,7 @@ import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background-color: black;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const Loader = styled.div`
@@ -59,6 +60,7 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+  z-index: 2;
 `;
 
 const BigMovie = styled(motion.div)`
@@ -71,6 +73,7 @@ const BigMovie = styled(motion.div)`
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
+  z-index: 3;
 `;
 
 const BigCover = styled.div`
@@ -81,18 +84,33 @@ const BigCover = styled.div`
 `;
 
 const BigTitle = styled.h2`
+  height: 100px;
   color: ${(props) => props.theme.white.lighter};
   padding: 10px;
   font-size: 36px;
   position: relative;
-  top: -60px;
+  top: -100px;
+  display: flex;
+  align-items: flex-end;
+`;
+
+const BigContents = styled.div`
+  width: 100%;
+  height: calc(100% - 400px);
+  position: absolute;
+  top: 400px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const BigOverview = styled.p`
   padding: 20px;
   color: ${(props) => props.theme.white.lighter};
-  position: relative;
-  top: -60px;
 `;
 
 function Tv() {
@@ -124,6 +142,10 @@ function Tv() {
         (tv) => String(tv.id) === bigTvMatch.params.tvId
       ) ||
       topData?.results.find((tv) => String(tv.id) === bigTvMatch.params.tvId));
+  useEffect(() => {
+    if (clickedTv) document.body.style.overflowY = "hidden";
+    else document.body.style.overflowY = "scroll";
+  }, [clickedTv]);
   return (
     <Wrapper>
       {latestIsLoading || todayIsLoading || popularIsLoading || topIsLoading ? (
@@ -162,7 +184,9 @@ function Tv() {
                         }}
                       />
                       <BigTitle>{clickedTv.name}</BigTitle>
-                      <BigOverview>{clickedTv.overview}</BigOverview>
+                      <BigContents>
+                        <BigOverview>{clickedTv.overview}</BigOverview>
+                      </BigContents>
                     </>
                   )}
                 </BigMovie>

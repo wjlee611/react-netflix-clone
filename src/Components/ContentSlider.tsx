@@ -50,7 +50,7 @@ const Btn = styled.button`
   border: none;
   position: absolute;
   top: 120px;
-  z-index: 10;
+  z-index: 1;
   background-color: transparent;
   filter: invert(99%) sepia(0%) saturate(2022%) hue-rotate(289deg)
     brightness(109%) contrast(100%);
