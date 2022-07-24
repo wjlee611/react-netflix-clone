@@ -39,7 +39,7 @@ export function getMoviesUpcoming() {
   );
 }
 
-export interface IMovieDetail {
+export interface IGetMovieDetail {
   id: number;
   backdrop_path: string;
   title: string;
@@ -55,9 +55,6 @@ export async function getMoviesDetail(id: number) {
   const response = await fetch(`${BASE_PATH}/movie/${id}?api_key=${API_KEY}`);
   const json = await response.json();
   return json;
-  // return fetch(`${BASE_PATH}/movie/${id}?api_key=${API_KEY}`).then((res) =>
-  //   res.json()
-  // );
 }
 
 //Tv
@@ -104,7 +101,7 @@ export function getTvsTop() {
   );
 }
 
-export interface ITvDetail {
+export interface IGetTvDetail {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -117,8 +114,8 @@ export interface ITvDetail {
   number_of_seasons: number;
 }
 
-export function getTvDetail(id: number) {
-  return fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}`).then((res) =>
-    res.json()
-  );
+export async function getTvDetail(id: number) {
+  const response = await fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}`);
+  const json = await response.json();
+  return json;
 }

@@ -71,6 +71,10 @@ body {
     display: none; /* Chrome, Safari, Opera*/
   }
 }
+a {
+  text-decoration: none;
+  color: gold;
+}
 `;
 
 const client = new QueryClient();

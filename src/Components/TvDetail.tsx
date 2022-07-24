@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMoviesDetail, IMovie, IGetMovieDetail } from "../api";
+import { getTvDetail, ITv, IGetTvDetail } from "../api";
 import { makeImagePath } from "../utils";
 
 const BigCover = styled.div`
@@ -45,15 +45,19 @@ const DetailContents = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 20px;
-  & > h3:first-child {
+  & > h3:first-child,
+  & > h3:nth-child(3) {
     font-size: 24px;
     font-weight: 700;
     border-bottom: 1px solid white;
     margin-bottom: 5px;
   }
+  & > h3:nth-child(3) {
+    margin-top: 15px;
+  }
 `;
 
-const Genres = styled.ul`
+const ListItems = styled.ul`
   display: flex;
   li {
     margin-right: 15px;
@@ -72,14 +76,14 @@ const DetailText = styled.div`
   }
 `;
 
-interface IDetail {
-  clickedMovie: IMovie;
+interface ITvDetail {
+  clickedTv: ITv;
   id: number;
 }
-function Detail({ clickedMovie, id }: IDetail) {
-  const { data, isLoading } = useQuery<IGetMovieDetail>(
-    ["movies", "detail", id],
-    () => getMoviesDetail(id)
+function TvDetail({ clickedTv, id }: ITvDetail) {
+  const { data, isLoading } = useQuery<IGetTvDetail>(
+    ["tvs", "detail", id],
+    () => getTvDetail(id)
   );
   console.log(data);
   return (
@@ -87,39 +91,49 @@ function Detail({ clickedMovie, id }: IDetail) {
       <BigCover
         style={{
           backgroundImage: `linear-gradient(transparent, black), url(${makeImagePath(
-            clickedMovie?.backdrop_path,
+            clickedTv?.backdrop_path,
             "w500"
           )})`,
         }}
       />
-      <BigTitle>{clickedMovie.title}</BigTitle>
+      <BigTitle>{clickedTv.name}</BigTitle>
       <BigContents>
-        <BigOverview>{clickedMovie.overview}</BigOverview>
+        <BigOverview>{clickedTv.overview}</BigOverview>
         {isLoading ? (
           <span>Loading...</span>
         ) : (
           <DetailContents>
             <h3>Genres</h3>
-            <Genres>
+            <ListItems>
               {data?.genres.length ? (
                 data?.genres.map((genre) => <li>{genre.name}</li>)
               ) : (
                 <li>No data</li>
               )}
-            </Genres>
+            </ListItems>
+            <h3>Created by</h3>
+            <ListItems>
+              {data?.created_by.length ? (
+                data?.created_by.map((creator) => <li>{creator.name}</li>)
+              ) : (
+                <li>No data</li>
+              )}
+            </ListItems>
             <DetailText>
-              <span>Release Date</span>
-              <span>{data?.release_date}</span>
-            </DetailText>
-            <DetailText>
-              <span>RunTime</span>
-              <span>{data?.runtime} mins</span>
-            </DetailText>
-            <DetailText>
-              <span>Score</span>
+              <span>Homepage</span>
               <span>
-                {data?.vote_average} / 10 ({data?.vote_count} votes)
+                <a href={data?.homepage} target="_blank" rel="noreferrer">
+                  {data?.homepage}
+                </a>
               </span>
+            </DetailText>
+            <DetailText>
+              <span>Episodes</span>
+              <span>{data?.number_of_episodes}</span>
+            </DetailText>
+            <DetailText>
+              <span>Seasons</span>
+              <span>{data?.number_of_seasons}</span>
             </DetailText>
           </DetailContents>
         )}
@@ -128,4 +142,4 @@ function Detail({ clickedMovie, id }: IDetail) {
   );
 }
 
-export default Detail;
+export default TvDetail;

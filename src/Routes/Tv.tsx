@@ -17,6 +17,7 @@ import {
   ITv,
 } from "../api";
 import TvContentSlider from "../Components/TvContentSlider";
+import TvDetail from "../Components/TvDetail";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
@@ -153,6 +154,7 @@ function Tv() {
       ) : (
         <>
           <Banner bgphoto={makeImagePath(latestData?.backdrop_path || "")}>
+            <h1 style={{ color: "red", fontWeight: 700 }}>Latest!</h1>
             <Title>{latestData?.name}</Title>
             <Overview>{latestData?.overview}</Overview>
           </Banner>
@@ -174,20 +176,10 @@ function Tv() {
                   }}
                 >
                   {clickedTv && (
-                    <>
-                      <BigCover
-                        style={{
-                          backgroundImage: `linear-gradient(transparent, black), url(${makeImagePath(
-                            clickedTv.backdrop_path,
-                            "w500"
-                          )})`,
-                        }}
-                      />
-                      <BigTitle>{clickedTv.name}</BigTitle>
-                      <BigContents>
-                        <BigOverview>{clickedTv.overview}</BigOverview>
-                      </BigContents>
-                    </>
+                    <TvDetail
+                      clickedTv={clickedTv}
+                      id={Number(bigTvMatch.params.tvId)}
+                    />
                   )}
                 </BigMovie>
               </>
