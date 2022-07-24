@@ -2,7 +2,7 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { IgetMoviesResult, IgetTvsResult } from "../api";
+import { IgetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
 import leftBtn from "../Images/angle-left-solid.svg";
 import rightBtn from "../Images/angle-right-solid.svg";

@@ -77,43 +77,6 @@ const BigMovie = styled(motion.div)`
   z-index: 3;
 `;
 
-const BigCover = styled.div`
-  width: 100%;
-  background-size: cover;
-  background-position: center center;
-  height: 400px;
-`;
-
-const BigTitle = styled.h2`
-  height: 100px;
-  color: ${(props) => props.theme.white.lighter};
-  padding: 10px;
-  font-size: 36px;
-  position: relative;
-  top: -100px;
-  display: flex;
-  align-items: flex-end;
-`;
-
-const BigContents = styled.div`
-  width: 100%;
-  height: calc(100% - 400px);
-  position: absolute;
-  top: 400px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-`;
-
-const BigOverview = styled.p`
-  padding: 20px;
-  color: ${(props) => props.theme.white.lighter};
-`;
-
 function Tv() {
   const history = useHistory();
   const bigTvMatch = useRouteMatch<{ tvId: string }>("/tv/:tvId");
